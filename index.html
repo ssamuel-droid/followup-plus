@@ -648,19 +648,32 @@ function insertToken(t) {
 // GOOGLE OAUTH
 // ══════════════════════════════════════════
 function connectGoogle() {
-  const client = google.accounts.oauth2.initTokenClient({
+  const params = new URLSearchParams({
     client_id: GOOGLE_CLIENT_ID,
+    redirect_uri: window.location.origin + window.location.pathname,
+    response_type: 'token',
     scope: SCOPES,
-    callback: (resp) => {
-      if (resp.error) { showToast('Sign-in cancelled or failed.'); return; }
-      currentToken = resp.access_token;
-      fetchUserEmail(currentToken).then(email => {
-        currentUserEmail = email;
-        deploy();
-      }).catch(() => showToast('Could not get account info. Please try again.'));
-    }
+    include_granted_scopes: 'true',
+    prompt: editingIdx !== null ? 'select_account' : 'select_account'
   });
-  client.requestAccessToken({prompt: editingIdx !== null ? '' : 'select_account'});
+  const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+  const popup = window.open(authUrl, 'googleAuth', 'width=500,height=620,left=200,top=100');
+  const poll = setInterval(() => {
+    try {
+      if (!popup || popup.closed) { clearInterval(poll); showToast('Sign-in cancelled.'); return; }
+      const hash = popup.location.hash;
+      if (hash && hash.includes('access_token')) {
+        clearInterval(poll);
+        popup.close();
+        const p = new URLSearchParams(hash.slice(1));
+        currentToken = p.get('access_token');
+        fetchUserEmail(currentToken).then(email => {
+          currentUserEmail = email;
+          deploy();
+        }).catch(() => showToast('Could not get account info. Please try again.'));
+      }
+    } catch(e) { /* cross-origin — still loading */ }
+  }, 300);
 }
 
 async function fetchUserEmail(token) {
