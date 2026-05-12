@@ -6,425 +6,872 @@
 <title>FollowUp+ — Never Let an Email Slip</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --ink: #0f0e0c; --cream: #f5f0e8; --amber: #d4892a; --amber-light: #f5c878;
-    --amber-pale: #fdf3dc; --rust: #b84c2e; --muted: #8a8070; --border: #d8cfc0;
-    --white: #ffffff; --shadow: rgba(15,14,12,0.12); --green: #2d7a4f; --green-pale: #eaf5ef;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); min-height:100vh; overflow-x:hidden; }
+:root{
+  --ink:#0f0e0c;--cream:#f5f0e8;--amber:#d4892a;--amber-light:#f5c878;
+  --amber-pale:#fdf3dc;--rust:#b84c2e;--muted:#8a8070;--border:#d8cfc0;
+  --white:#ffffff;--shadow:rgba(15,14,12,0.12);--green:#2d7a4f;--green-pale:#eaf5ef;
+  --blue:#1a73e8;--blue-pale:#e8f0fe;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
 
-  header { display:flex; align-items:center; justify-content:space-between; padding:1.5rem 3rem; border-bottom:1.5px solid var(--border); background:var(--cream); position:sticky; top:0; z-index:100; }
-  .logo { display:flex; align-items:baseline; gap:0.25rem; }
-  .logo-word { font-family:'Playfair Display',serif; font-weight:900; font-size:1.6rem; color:var(--ink); letter-spacing:-0.02em; }
-  .logo-plus { font-family:'DM Mono',monospace; font-weight:500; font-size:1.4rem; color:var(--amber); margin-left:2px; }
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;border-bottom:1.5px solid var(--border);background:var(--cream);position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:baseline;gap:0.15rem;cursor:pointer;}
+.logo-word{font-family:'Playfair Display',serif;font-weight:900;font-size:1.5rem;color:var(--ink);letter-spacing:-0.02em;}
+.logo-plus{font-family:'DM Mono',monospace;font-weight:500;font-size:1.3rem;color:var(--amber);}
 
-  .btn { display:inline-flex; align-items:center; gap:0.4rem; padding:0.55rem 1.2rem; border-radius:6px; font-family:'DM Sans',sans-serif; font-size:0.875rem; font-weight:500; cursor:pointer; border:none; transition:all 0.18s ease; text-decoration:none; }
-  .btn-ghost { background:transparent; color:var(--muted); border:1.5px solid var(--border); }
-  .btn-ghost:hover { color:var(--ink); border-color:var(--ink); background:rgba(0,0,0,0.03); }
-  .btn-primary { background:var(--ink); color:var(--white); }
-  .btn-primary:hover { background:#2a2820; transform:translateY(-1px); box-shadow:0 4px 14px var(--shadow); }
-  .btn-amber { background:var(--amber); color:var(--white); }
-  .btn-amber:hover { background:#c07820; transform:translateY(-1px); box-shadow:0 4px 14px rgba(212,137,42,0.3); }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.55rem 1.2rem;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.875rem;font-weight:500;cursor:pointer;border:none;transition:all 0.18s ease;text-decoration:none;white-space:nowrap;}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border);}
+.btn-ghost:hover{color:var(--ink);border-color:var(--ink);}
+.btn-primary{background:var(--ink);color:var(--white);}
+.btn-primary:hover{background:#2a2820;transform:translateY(-1px);box-shadow:0 4px 14px var(--shadow);}
+.btn-amber{background:var(--amber);color:var(--white);}
+.btn-amber:hover{background:#c07820;transform:translateY(-1px);box-shadow:0 4px 14px rgba(212,137,42,0.3);}
+.btn-google{background:var(--white);color:#3c4043;border:1.5px solid var(--border);padding:0.75rem 1.5rem;border-radius:8px;font-size:0.95rem;font-weight:500;display:inline-flex;align-items:center;gap:0.65rem;}
+.btn-google:hover{border-color:#4285f4;box-shadow:0 4px 16px var(--shadow);transform:translateY(-1px);}
+.btn-danger{background:#fde8e8;color:var(--rust);border:1.5px solid #f5c0c0;}
+.btn-danger:hover{background:#f5c0c0;}
 
-  .hero { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; padding:5rem 3rem 4rem; max-width:1200px; margin:0 auto; }
-  .hero-eyebrow { font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; color:var(--amber); margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem; }
-  .hero-eyebrow::before { content:''; display:block; width:2rem; height:1.5px; background:var(--amber); }
-  h1 { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:900; line-height:1.08; letter-spacing:-0.03em; color:var(--ink); margin-bottom:1.5rem; }
-  h1 em { font-style:italic; color:var(--amber); }
-  .hero-sub { font-size:1.05rem; line-height:1.65; color:var(--muted); margin-bottom:2rem; max-width:420px; }
-  .hero-cta { display:flex; gap:0.75rem; flex-wrap:wrap; }
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
 
-  .mock-card { background:var(--white); border:1.5px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:0 20px 60px var(--shadow); transform:rotate(1.5deg); animation:floatCard 6s ease-in-out infinite; }
-  @keyframes floatCard { 0%,100%{transform:rotate(1.5deg) translateY(0)} 50%{transform:rotate(1.5deg) translateY(-8px)} }
-  .mock-header { background:var(--amber-pale); border-bottom:1.5px solid var(--border); padding:0.9rem 1.25rem; display:flex; align-items:center; justify-content:space-between; }
-  .mock-title { font-family:'DM Mono',monospace; font-size:0.72rem; font-weight:500; color:var(--amber); letter-spacing:0.08em; text-transform:uppercase; }
-  .mock-date { font-family:'DM Mono',monospace; font-size:0.68rem; color:var(--muted); }
-  .mock-subject { padding:1rem 1.25rem 0.5rem; font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--ink); }
-  .mock-row { display:grid; grid-template-columns:2fr 1fr 3fr auto; gap:0.75rem; align-items:center; padding:0.65rem 1.25rem; border-bottom:1px solid var(--border); font-size:0.78rem; transition:background 0.12s; }
-  .mock-row:last-child { border-bottom:none; }
-  .mock-row:hover { background:var(--amber-pale); }
-  .mock-recipient { font-weight:500; color:var(--ink); }
-  .mock-hrs { font-family:'DM Mono',monospace; font-size:0.7rem; background:#fde8d8; color:var(--rust); padding:0.2rem 0.4rem; border-radius:4px; text-align:center; white-space:nowrap; }
-  .mock-preview { color:var(--muted); font-size:0.72rem; line-height:1.3; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-  .mock-btn { background:var(--amber); color:white; border:none; padding:0.3rem 0.6rem; border-radius:5px; font-size:0.68rem; font-weight:500; cursor:pointer; white-space:nowrap; }
+/* ── LANDING PAGE ── */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:5rem 3rem 4rem;max-width:1200px;margin:0 auto;}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem;}
+.hero-eyebrow::before{content:'';display:block;width:2rem;height:1.5px;background:var(--amber);}
+h1{font-family:'Playfair Display',serif;font-size:3.4rem;font-weight:900;line-height:1.08;letter-spacing:-0.03em;color:var(--ink);margin-bottom:1.5rem;}
+h1 em{font-style:italic;color:var(--amber);}
+.hero-sub{font-size:1rem;line-height:1.65;color:var(--muted);margin-bottom:2rem;max-width:420px;}
+.hero-cta{display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;}
 
-  .section { max-width:1100px; margin:0 auto; padding:0 3rem 5rem; }
-  .section-label { font-family:'DM Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom:3rem; display:flex; align-items:center; gap:0.75rem; }
-  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+/* mock card */
+.mock-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px var(--shadow);transform:rotate(1.5deg);animation:floatCard 6s ease-in-out infinite;}
+@keyframes floatCard{0%,100%{transform:rotate(1.5deg) translateY(0)}50%{transform:rotate(1.5deg) translateY(-8px)}}
+.mock-header{background:var(--amber-pale);border-bottom:1.5px solid var(--border);padding:0.9rem 1.25rem;display:flex;align-items:center;justify-content:space-between;}
+.mock-title-sm{font-family:'DM Mono',monospace;font-size:0.7rem;font-weight:500;color:var(--amber);letter-spacing:0.08em;text-transform:uppercase;}
+.mock-dt{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);}
+.mock-subject{padding:1rem 1.25rem 0.5rem;font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;}
+.mock-row{display:grid;grid-template-columns:2fr 1fr 3fr auto;gap:0.6rem;align-items:center;padding:0.6rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.75rem;}
+.mock-row:last-child{border-bottom:none;}
+.mock-hrs{font-family:'DM Mono',monospace;font-size:0.68rem;background:#fde8d8;color:var(--rust);padding:0.18rem 0.35rem;border-radius:4px;text-align:center;white-space:nowrap;}
+.mock-prev{color:var(--muted);font-size:0.7rem;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.mock-btn-sm{background:var(--amber);color:white;border:none;padding:0.28rem 0.55rem;border-radius:4px;font-size:0.66rem;font-weight:500;cursor:pointer;white-space:nowrap;}
 
-  .steps-nav { display:flex; margin-bottom:3rem; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; background:var(--white); }
-  .step-tab { flex:1; padding:1rem 0.5rem; text-align:center; border:none; background:transparent; cursor:pointer; border-right:1.5px solid var(--border); transition:background 0.15s; }
-  .step-tab:last-child { border-right:none; }
-  .step-tab.active { background:var(--ink); color:var(--white); }
-  .step-tab:not(.active):hover { background:var(--cream); }
-  .step-num { font-family:'DM Mono',monospace; font-size:0.65rem; display:block; opacity:0.5; margin-bottom:0.2rem; }
-  .step-tab.active .step-num { opacity:0.7; }
-  .step-name { font-size:0.82rem; font-weight:500; }
+/* ACCOUNTS DASHBOARD (returning users) */
+.dashboard{max-width:780px;margin:0 auto;padding:3rem;}
+.dash-header{margin-bottom:2.5rem;}
+.dash-title{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;margin-bottom:0.4rem;}
+.dash-sub{color:var(--muted);font-size:0.9rem;}
+.account-cards{display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem;}
+.account-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.account-card:hover{border-color:var(--amber);box-shadow:0 4px 16px var(--shadow);}
+.account-left{display:flex;align-items:center;gap:1rem;}
+.account-avatar{width:42px;height:42px;border-radius:50%;background:var(--blue-pale);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--blue);flex-shrink:0;}
+.account-email{font-weight:500;font-size:0.9rem;margin-bottom:0.2rem;}
+.account-meta{font-size:0.75rem;color:var(--muted);}
+.account-actions{display:flex;gap:0.5rem;flex-shrink:0;}
+.add-account-btn{display:flex;align-items:center;gap:0.75rem;padding:1.1rem 1.5rem;border:2px dashed var(--border);border-radius:12px;background:transparent;cursor:pointer;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;width:100%;transition:all 0.18s;}
+.add-account-btn:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-pale);}
+.add-icon{width:32px;height:32px;border-radius:50%;border:2px dashed currentColor;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
 
-  .panel { display:none; }
-  .panel.active { display:block; }
-  .step-actions { display:flex; justify-content:flex-end; gap:0.75rem; margin-top:2.5rem; }
+/* WIZARD */
+.wizard-wrap{max-width:860px;margin:0 auto;padding:3rem;}
+.wizard-back{display:inline-flex;align-items:center;gap:0.4rem;color:var(--muted);font-size:0.85rem;cursor:pointer;margin-bottom:2rem;background:none;border:none;font-family:'DM Sans',sans-serif;}
+.wizard-back:hover{color:var(--ink);}
+.wizard-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-bottom:0.35rem;}
+.wizard-sub{color:var(--muted);font-size:0.88rem;margin-bottom:2.5rem;}
 
-  .config-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
-  .field-group { display:flex; flex-direction:column; gap:0.5rem; }
-  .field-group.full { grid-column:1/-1; }
-  label { font-family:'DM Mono',monospace; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:500; }
-  .hint { font-family:'DM Sans',sans-serif; text-transform:none; letter-spacing:0; color:var(--muted); font-size:0.72rem; font-weight:400; margin-top:0.2rem; }
-  input[type="number"],input[type="text"],textarea,select { padding:0.75rem 1rem; border:1.5px solid var(--border); border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.9rem; color:var(--ink); background:var(--white); transition:border-color 0.15s; width:100%; -webkit-appearance:none; }
-  input:focus,textarea:focus,select:focus { outline:none; border-color:var(--amber); box-shadow:0 0 0 3px rgba(212,137,42,0.12); }
-  textarea { resize:vertical; min-height:100px; line-height:1.55; }
-  .input-wrap { position:relative; display:flex; align-items:center; }
-  .input-wrap input { padding-right:3.5rem; }
-  .suffix { position:absolute; right:1rem; font-family:'DM Mono',monospace; font-size:0.72rem; color:var(--muted); pointer-events:none; }
+.steps-nav{display:flex;margin-bottom:2.5rem;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:var(--white);}
+.step-tab{flex:1;padding:0.9rem 0.5rem;text-align:center;border:none;background:transparent;cursor:pointer;border-right:1.5px solid var(--border);transition:background 0.15s;font-family:'DM Sans',sans-serif;}
+.step-tab:last-child{border-right:none;}
+.step-tab.active{background:var(--ink);color:var(--white);}
+.step-tab.done{background:var(--green-pale);color:var(--green);}
+.step-tab:not(.active):not(.done):hover{background:var(--cream);}
+.step-num{font-family:'DM Mono',monospace;font-size:0.62rem;display:block;opacity:0.5;margin-bottom:0.15rem;}
+.step-tab.active .step-num,.step-tab.done .step-num{opacity:0.7;}
+.step-name{font-size:0.8rem;font-weight:500;}
 
-  .msg-box { background:var(--white); border:1.5px solid var(--border); border-radius:12px; overflow:hidden; }
-  .msg-toolbar { display:flex; align-items:center; gap:0.5rem; padding:0.75rem 1rem; border-bottom:1.5px solid var(--border); background:var(--cream); }
-  .dot { width:10px; height:10px; border-radius:50%; }
-  .dot-r{background:#ff6159} .dot-y{background:#ffbe2e} .dot-g{background:#28c941}
-  .msg-body { padding:1.25rem; }
-  .msg-body textarea { border:none; padding:0; background:transparent; font-size:0.9rem; color:var(--ink); min-height:90px; width:100%; }
-  .msg-body textarea:focus { outline:none; box-shadow:none; border:none; }
-  .token-bar { display:flex; gap:0.4rem; flex-wrap:wrap; padding:0.75rem 1rem; border-top:1.5px solid var(--border); background:var(--cream); }
-  .token { font-family:'DM Mono',monospace; font-size:0.68rem; background:var(--amber-pale); color:var(--amber); border:1px solid #e8c97a; padding:0.2rem 0.5rem; border-radius:4px; cursor:pointer; }
-  .token:hover { background:var(--amber-light); color:var(--ink); }
-  .token-lbl { font-size:0.7rem; color:var(--muted); display:flex; align-items:center; margin-right:0.25rem; }
+.panel{display:none;}
+.panel.active{display:block;}
+.step-actions{display:flex;justify-content:flex-end;gap:0.75rem;margin-top:2.5rem;}
 
-  .script-box { background:#1a1a18; border-radius:12px; overflow:hidden; }
-  .script-bar { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 1.25rem; background:#2a2a28; }
-  .script-fn { font-family:'DM Mono',monospace; font-size:0.72rem; color:#a0998a; }
-  .script-btns { display:flex; gap:0.5rem; }
-  .script-btn { background:#3a3a38; color:#d8d0c0; border:none; padding:0.35rem 0.8rem; border-radius:5px; font-family:'DM Mono',monospace; font-size:0.7rem; cursor:pointer; transition:background 0.15s; text-decoration:none; display:inline-block; }
-  .script-btn:hover { background:var(--amber); color:white; }
-  .script-body { padding:1.5rem; overflow-x:auto; max-height:420px; overflow-y:auto; }
-  .script-body pre { font-family:'DM Mono',monospace; font-size:0.75rem; line-height:1.6; color:#d8d0c0; white-space:pre; }
+/* FORM ELEMENTS */
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.75rem;}
+.field-group{display:flex;flex-direction:column;gap:0.45rem;}
+.field-group.full{grid-column:1/-1;}
+label.field-label{font-family:'DM Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:500;}
+.hint{font-size:0.72rem;color:var(--muted);margin-top:0.15rem;line-height:1.4;}
+input[type="number"],input[type="text"],textarea,select{padding:0.7rem 1rem;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--ink);background:var(--white);transition:border-color 0.15s;width:100%;-webkit-appearance:none;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(212,137,42,0.12);}
+textarea{resize:vertical;min-height:90px;line-height:1.55;}
 
-  .info-box { background:var(--amber-pale); border:1.5px solid #e8c97a; border-radius:10px; padding:1rem 1.25rem; font-size:0.83rem; line-height:1.6; margin-bottom:2rem; }
-  .info-box strong { color:var(--amber); }
-  .ok-box { background:var(--green-pale); border:1.5px solid #a8d5b5; border-radius:10px; padding:1rem 1.25rem; font-size:0.83rem; line-height:1.6; color:var(--green); }
+/* checkbox row */
+.check-row{display:flex;align-items:center;gap:0.65rem;padding:0.85rem 1rem;background:var(--white);border:1.5px solid var(--border);border-radius:8px;cursor:pointer;}
+.check-row:hover{border-color:var(--amber);background:var(--amber-pale);}
+.check-row input[type="checkbox"]{width:18px;height:18px;cursor:pointer;accent-color:var(--amber);}
+.check-row-text strong{display:block;font-size:0.88rem;margin-bottom:0.1rem;}
+.check-row-text span{font-size:0.75rem;color:var(--muted);}
 
-  .deploy-list { display:flex; flex-direction:column; gap:1rem; margin-top:2rem; }
-  .deploy-item { display:flex; gap:1rem; padding:1.25rem; background:var(--white); border:1.5px solid var(--border); border-radius:10px; align-items:flex-start; }
-  .deploy-n { width:2rem; height:2rem; background:var(--ink); color:var(--white); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:0.75rem; font-weight:500; flex-shrink:0; }
-  .deploy-txt strong { display:block; font-size:0.88rem; margin-bottom:0.25rem; }
-  .deploy-txt span { font-size:0.8rem; color:var(--muted); line-height:1.5; }
-  .deploy-txt a { color:var(--amber); text-decoration:none; }
-  .deploy-txt a:hover { text-decoration:underline; }
-  code { font-family:'DM Mono',monospace; background:var(--amber-pale); padding:0.1rem 0.3rem; border-radius:3px; font-size:0.82em; }
+/* message box */
+.msg-box{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;}
+.msg-toolbar{display:flex;align-items:center;gap:0.5rem;padding:0.7rem 1rem;border-bottom:1.5px solid var(--border);background:var(--cream);}
+.dot{width:10px;height:10px;border-radius:50%;}
+.dot-r{background:#ff6159}.dot-y{background:#ffbe2e}.dot-g{background:#28c941}
+.msg-body textarea{border:none;padding:1.1rem 1.25rem;background:transparent;font-size:0.9rem;color:var(--ink);min-height:90px;width:100%;}
+.msg-body textarea:focus{outline:none;box-shadow:none;}
+.token-bar{display:flex;gap:0.4rem;flex-wrap:wrap;padding:0.7rem 1rem;border-top:1.5px solid var(--border);background:var(--cream);}
+.token{font-family:'DM Mono',monospace;font-size:0.68rem;background:var(--amber-pale);color:var(--amber);border:1px solid #e8c97a;padding:0.2rem 0.5rem;border-radius:4px;cursor:pointer;}
+.token:hover{background:var(--amber-light);color:var(--ink);}
+.token-lbl{font-size:0.7rem;color:var(--muted);display:flex;align-items:center;margin-right:0.25rem;}
 
-  .features { background:var(--ink); color:var(--white); padding:4rem 3rem; margin-top:2rem; }
-  .features-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:3rem; }
-  .feat h3 { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; color:var(--amber-light); }
-  .feat p { font-size:0.85rem; color:rgba(245,240,232,0.6); line-height:1.6; }
-  .feat-icon { font-size:1.5rem; margin-bottom:0.75rem; }
+/* DEPLOY / CONNECT PANEL */
+.connect-box{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:3rem;text-align:center;max-width:520px;margin:0 auto;}
+.connect-icon{font-size:3rem;margin-bottom:1rem;}
+.connect-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:0.5rem;}
+.connect-sub{color:var(--muted);font-size:0.88rem;line-height:1.6;margin-bottom:2rem;max-width:360px;margin-left:auto;margin-right:auto;}
+.connect-perms{text-align:left;background:var(--cream);border-radius:8px;padding:1rem 1.25rem;margin-bottom:2rem;font-size:0.8rem;color:var(--muted);line-height:1.7;}
+.connect-perms strong{color:var(--ink);display:block;margin-bottom:0.4rem;font-size:0.82rem;}
+.connect-perms li{margin-left:1rem;}
 
-  footer { border-top:1.5px solid var(--border); padding:2rem 3rem; display:flex; align-items:center; justify-content:space-between; font-size:0.78rem; color:var(--muted); }
+/* PROGRESS */
+.progress-box{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:2.5rem;max-width:520px;margin:0 auto;}
+.progress-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:1.5rem;text-align:center;}
+.progress-steps{display:flex;flex-direction:column;gap:0.75rem;}
+.prog-step{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:8px;font-size:0.85rem;transition:background 0.2s;}
+.prog-step.pending{color:var(--muted);}
+.prog-step.running{background:var(--amber-pale);color:var(--amber);font-weight:500;}
+.prog-step.done{background:var(--green-pale);color:var(--green);}
+.prog-step.error{background:#fde8e8;color:var(--rust);}
+.prog-icon{width:1.5rem;text-align:center;font-size:0.9rem;flex-shrink:0;}
+.spinner{width:14px;height:14px;border:2px solid var(--amber);border-top-color:transparent;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .toast { position:fixed; bottom:2rem; right:2rem; background:var(--ink); color:var(--white); padding:0.85rem 1.5rem; border-radius:8px; font-size:0.85rem; box-shadow:0 8px 30px rgba(0,0,0,0.2); transform:translateY(6rem); opacity:0; transition:all 0.3s ease; z-index:9999; }
-  .toast.show { transform:translateY(0); opacity:1; }
+/* SUCCESS */
+.success-box{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:3rem;text-align:center;max-width:520px;margin:0 auto;}
 
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .hero-text { animation:fadeUp 0.6s ease both; }
-  .hero-visual { animation:fadeUp 0.6s ease 0.2s both; }
+/* INFO BANNERS */
+.info-box{background:var(--amber-pale);border:1.5px solid #e8c97a;border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;line-height:1.6;margin-bottom:1.5rem;}
+.info-box strong{color:var(--amber);}
+.ok-box{background:var(--green-pale);border:1.5px solid #a8d5b5;border-radius:10px;padding:1rem 1.25rem;font-size:0.83rem;line-height:1.55;color:var(--green);}
 
-  @media(max-width:820px){
-    .hero{grid-template-columns:1fr;padding:3rem 1.5rem}
-    .hero-visual{display:none}
-    .config-grid{grid-template-columns:1fr}
-    .features-inner{grid-template-columns:1fr}
-    header{padding:1rem 1.5rem}
-    .section{padding:0 1.5rem 4rem}
-    h1{font-size:2.5rem}
-    .steps-nav{flex-wrap:wrap}
-    .step-tab{min-width:50%}
-  }
+/* FEATURES STRIP */
+.features{background:var(--ink);color:var(--white);padding:4rem 3rem;margin-top:3rem;}
+.features-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;}
+.feat h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem;color:var(--amber-light);}
+.feat p{font-size:0.85rem;color:rgba(245,240,232,0.6);line-height:1.6;}
+.feat-icon{font-size:1.5rem;margin-bottom:0.75rem;}
+
+footer{border-top:1.5px solid var(--border);padding:1.75rem 3rem;display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;color:var(--muted);}
+
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--ink);color:var(--white);padding:0.85rem 1.5rem;border-radius:8px;font-size:0.85rem;box-shadow:0 8px 30px rgba(0,0,0,0.2);transform:translateY(6rem);opacity:0;transition:all 0.3s ease;z-index:9999;max-width:340px;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp 0.5s ease both;}
+
+@media(max-width:820px){
+  .hero{grid-template-columns:1fr;padding:3rem 1.5rem}
+  #heroVisual{display:none}
+  .config-grid{grid-template-columns:1fr}
+  .features-inner{grid-template-columns:1fr}
+  header{padding:1rem 1.5rem}
+  .wizard-wrap,.dashboard{padding:1.5rem}
+  h1{font-size:2.4rem}
+  .steps-nav{flex-wrap:wrap}
+  .step-tab{min-width:50%}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo"><span class="logo-word">FollowUp</span><span class="logo-plus">+</span></div>
-  <nav style="display:flex;gap:0.5rem;">
-    <button class="btn btn-ghost" onclick="scrollToSetup()">Set Up</button>
-    <button class="btn btn-primary" onclick="scrollToSetup()">Get Started →</button>
-  </nav>
+  <div class="logo" onclick="goHome()">
+    <span class="logo-word">FollowUp</span><span class="logo-plus">+</span>
+  </div>
+  <div id="headerActions">
+    <button class="btn btn-primary" onclick="startWizard(null)">Get Started →</button>
+  </div>
 </header>
 
-<section class="hero">
-  <div class="hero-text">
-    <div class="hero-eyebrow">Gmail Follow-Up, Automated</div>
-    <h1>Stop <em>waiting.</em><br>Start following up.</h1>
-    <p class="hero-sub">FollowUp+ watches your Gmail sent folder and alerts you every morning about unanswered emails — then lets you send a follow-up with one click.</p>
-    <div class="hero-cta">
-      <button class="btn btn-amber" style="font-size:0.95rem;padding:0.75rem 1.75rem;" onclick="scrollToSetup()">Set Up FollowUp+ →</button>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="mock-card">
-      <div class="mock-header">
-        <span class="mock-title">📬 FollowUp+ Digest — Mon May 11</span>
-        <span class="mock-date">7:00 AM</span>
+<!-- ════════════════════════════════════════
+     PAGE: LANDING
+════════════════════════════════════════ -->
+<div class="page active" id="pageLanding">
+  <section class="hero">
+    <div class="fade-up">
+      <div class="hero-eyebrow">Gmail Follow-Up, Automated</div>
+      <h1>Stop <em>waiting.</em><br>Start following up.</h1>
+      <p class="hero-sub">FollowUp+ watches your Gmail sent folder and alerts you every morning about unanswered emails — then lets you send a follow-up with one click.</p>
+      <div class="hero-cta" id="heroActions">
+        <button class="btn btn-amber" style="font-size:0.95rem;padding:0.75rem 1.75rem;" onclick="startWizard(null)">Get Started →</button>
       </div>
-      <div class="mock-subject">3 emails still waiting for a reply</div>
-      <div>
-        <div class="mock-row"><div class="mock-recipient">sarah@acme.co</div><div class="mock-hrs">52 hrs</div><div class="mock-preview">Re: Q2 proposal<br>Hi Sarah, just wanted to circle back...</div><button class="mock-btn">Follow Up →</button></div>
-        <div class="mock-row"><div class="mock-recipient">mike@partners.io</div><div class="mock-hrs">28 hrs</div><div class="mock-preview">Intro: meeting this week?<br>Mike, would love to connect...</div><button class="mock-btn">Follow Up →</button></div>
-        <div class="mock-row"><div class="mock-recipient">ops@vendor.com</div><div class="mock-hrs">74 hrs</div><div class="mock-preview">Invoice #1042 outstanding<br>Sending a reminder about...</div><button class="mock-btn">Follow Up →</button></div>
+      <div style="margin-top:1.25rem;display:flex;align-items:flex-start;gap:0.6rem;max-width:420px;background:var(--green-pale);border:1.5px solid #a8d5b5;border-radius:10px;padding:0.85rem 1rem;">
+        <span style="font-size:1.1rem;flex-shrink:0;margin-top:0.05rem">🔒</span>
+        <p style="font-size:0.8rem;color:var(--green);line-height:1.55;margin:0"><strong>100% private by design.</strong> FollowUp+ never touches your emails. The script runs entirely inside your own Google account — on Google's servers, not ours. We have no servers, no database, and no access to anything.</p>
       </div>
     </div>
-  </div>
-</section>
-
-<div id="setup" class="section">
-  <div class="section-label">Setup Wizard</div>
-
-  <div class="steps-nav">
-    <button class="step-tab active" onclick="goStep(1,this)"><span class="step-num">Step 01</span><span class="step-name">Configure</span></button>
-    <button class="step-tab" onclick="goStep(2,this)"><span class="step-num">Step 02</span><span class="step-name">Your Message</span></button>
-    <button class="step-tab" onclick="goStep(3,this)"><span class="step-num">Step 03</span><span class="step-name">Get Script</span></button>
-    <button class="step-tab" onclick="goStep(4,this)"><span class="step-num">Step 04</span><span class="step-name">Deploy</span></button>
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="panel active" id="panel-1">
-    <div class="config-grid">
-      <div class="field-group">
-        <label>Hours Before Follow-Up</label>
-        <span class="hint">Flag emails not replied to within this many hours</span>
-        <div class="input-wrap"><input type="number" id="waitHours" value="24" min="1" max="720"><span class="suffix">hours</span></div>
-      </div>
-      <div class="field-group">
-        <label>Daily Digest Hour</label>
-        <span class="hint">What hour should your morning digest arrive? (0–23)</span>
-        <div class="input-wrap"><input type="number" id="digestHour" value="7" min="0" max="23"><span class="suffix">:00</span></div>
-      </div>
-      <div class="field-group">
-        <label>Preview Length</label>
-        <span class="hint">Characters of email body to show in digest</span>
-        <div class="input-wrap"><input type="number" id="previewLen" value="200" min="50" max="500"><span class="suffix">chars</span></div>
-      </div>
-      <div class="field-group">
-        <label>Business Days Only?</label>
-        <span class="hint">Pause the waiting clock on Saturday &amp; Sunday</span>
-        <select id="skipWknds"><option value="true">Yes — only count Mon–Fri</option><option value="false">No — count all hours</option></select>
-      </div>
-      <div class="field-group full">
-        <label>Excluded Recipients / Domains</label>
-        <span class="hint">Never flag emails to these addresses or domains (comma-separated)</span>
-        <input type="text" id="excludes" placeholder="noreply@, newsletters@company.com, boss@acme.com">
-      </div>
-      <div class="field-group full">
-        <label>Follow-Up Email Subject</label>
-        <span class="hint">Leave blank to use "Re: [original subject]" — keeps it in the same thread</span>
-        <input type="text" id="followupSubj" placeholder='Leave blank for "Re: [original subject]"'>
-      </div>
-    </div>
-    <div class="step-actions">
-      <button class="btn btn-primary" onclick="nextStep(2)">Next: Your Message →</button>
-    </div>
-  </div>
-
-  <!-- STEP 2 -->
-  <div class="panel" id="panel-2">
-    <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">Write the message prepended to every follow-up email. Use the tokens below to personalize it automatically.</p>
-    <div class="msg-box">
-      <div class="msg-toolbar">
-        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-        <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);margin-left:0.5rem;">Follow-up message editor</span>
-      </div>
-      <div class="msg-body">
-        <textarea id="followupMsg">Just following up on this email. Not sure if I received a response. Pls advise.</textarea>
-      </div>
-      <div class="token-bar">
-        <span class="token-lbl">Insert →</span>
-        <span class="token" onclick="insertToken('{{recipient_first_name}}')">{{recipient_first_name}}</span>
-        <span class="token" onclick="insertToken('{{subject}}')">{{subject}}</span>
-        <span class="token" onclick="insertToken('{{days_elapsed}}')">{{days_elapsed}}</span>
-        <span class="token" onclick="insertToken('{{original_date}}')">{{original_date}}</span>
-      </div>
-    </div>
-    <div style="margin-top:2rem;">
-      <label style="display:block;margin-bottom:0.5rem;">Send "All Clear" digest when nothing is pending?</label>
-      <select id="allClear"><option value="true">Yes — send a confirmation email even when all is clear</option><option value="false">No — skip the email if nothing needs follow-up</option></select>
-    </div>
-    <div class="step-actions">
-      <button class="btn btn-ghost" onclick="nextStep(1)">← Back</button>
-      <button class="btn btn-primary" onclick="nextStep(3)">Generate My Script →</button>
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="panel" id="panel-3">
-    <div class="info-box"><strong>Your personalized script is ready.</strong> Copy it, open Google Apps Script, paste it in, then follow Step 4 — the whole process takes about 3 minutes.</div>
-    <div class="script-box">
-      <div class="script-bar">
-        <span class="script-fn">FollowUpPlus.gs</span>
-        <div class="script-btns">
-          <button class="script-btn" onclick="copyScript()">Copy Script</button>
-          <a class="script-btn" href="https://script.google.com/create" target="_blank">Open Apps Script ↗</a>
+    <div id="heroVisual" class="fade-up" style="animation-delay:0.2s">
+      <div class="mock-card">
+        <div class="mock-header">
+          <span class="mock-title-sm">📬 FollowUp+ Digest — Mon May 11</span>
+          <span class="mock-dt">7:00 AM</span>
+        </div>
+        <div class="mock-subject">3 emails still waiting for a reply</div>
+        <div>
+          <div class="mock-row"><span style="font-weight:500">sarah@acme.co</span><span class="mock-hrs">52 hrs</span><span class="mock-prev">Q2 proposal — Hi Sarah, just wanted to circle back on this...</span><button class="mock-btn-sm">Follow Up →</button></div>
+          <div class="mock-row"><span style="font-weight:500">mike@partners.io</span><span class="mock-hrs">28 hrs</span><span class="mock-prev">Meeting this week? — Mike, would love to connect and...</span><button class="mock-btn-sm">Follow Up →</button></div>
+          <div class="mock-row"><span style="font-weight:500">ops@vendor.com</span><span class="mock-hrs">74 hrs</span><span class="mock-prev">Invoice #1042 — Sending a friendly reminder about the...</span><button class="mock-btn-sm">Follow Up →</button></div>
         </div>
       </div>
-      <div class="script-body"><pre id="scriptOut">Click "Generate My Script" in Step 2 to build your personalized script.</pre></div>
     </div>
-    <div class="step-actions">
-      <button class="btn btn-ghost" onclick="nextStep(2)">← Back</button>
-      <button class="btn btn-primary" onclick="nextStep(4)">Next: Deploy →</button>
+  </section>
+
+  <div class="features">
+    <div class="features-inner">
+      <div class="feat"><div class="feat-icon">🔒</div><h3>100% private by design</h3><p>FollowUp+ never touches your emails. The script runs entirely inside your own Google account — on Google's servers, not ours. We have no servers, no database, and no access to anything.</p></div>
+      <div class="feat"><div class="feat-icon">⚡</div><h3>One-click follow-ups</h3><p>Each morning digest has a "Send Follow-Up" button per thread. One click and your message is sent with the original email re-forwarded — instantly.</p></div>
+      <div class="feat"><div class="feat-icon">🛡️</div><h3>Duplicate-proof &amp; secure</h3><p>Once a follow-up is sent the thread is labeled and excluded from future digests. SHA-256 tokens prevent replay attacks and accidental double-sends.</p></div>
     </div>
   </div>
 
-  <!-- STEP 4 -->
-  <div class="panel" id="panel-4">
-    <div class="info-box"><strong>One-time setup — about 3 minutes.</strong> After this, FollowUp+ runs automatically every morning.</div>
-    <div class="deploy-list">
-      <div class="deploy-item"><div class="deploy-n">1</div><div class="deploy-txt"><strong>Open Google Apps Script</strong><span>Go to <a href="https://script.google.com/create" target="_blank">script.google.com/create</a> and sign in with the Gmail account you want to monitor.</span></div></div>
-      <div class="deploy-item"><div class="deploy-n">2</div><div class="deploy-txt"><strong>Paste your script</strong><span>Delete all existing code in the editor. Go back to Step 3, click "Copy Script", then paste into the Apps Script editor. Save with Ctrl+S (Cmd+S on Mac).</span></div></div>
-      <div class="deploy-item"><div class="deploy-n">3</div><div class="deploy-txt"><strong>Deploy as Web App</strong><span>Click <strong>Deploy → New Deployment</strong>. Set type to <strong>Web App</strong>. Set "Execute as" to <strong>Me</strong>. Set "Who has access" to <strong>Anyone</strong>. Click Deploy and <strong>copy the Web App URL</strong> shown.</span></div></div>
-      <div class="deploy-item"><div class="deploy-n">4</div><div class="deploy-txt"><strong>Paste the Web App URL into the script</strong><span>Back in the editor, find <code>WEB_APP_URL: "PASTE_YOUR_WEB_APP_URL_HERE"</code> near the top and replace the placeholder with the URL you just copied. Save again.</span></div></div>
-      <div class="deploy-item"><div class="deploy-n">5</div><div class="deploy-txt"><strong>Run setupTrigger</strong><span>In the function dropdown at the top of the editor, select <strong>setupTrigger</strong> and click Run. Accept the permissions Google requests — this is your own script accessing your own Gmail.</span></div></div>
-      <div class="deploy-item"><div class="deploy-n">6</div><div class="deploy-txt"><strong>Test it immediately</strong><span>Select <strong>sendDigestNow</strong> and click Run. Check your inbox — your digest should arrive within seconds. If nothing shows up, all your recent sent emails have been replied to.</span></div></div>
+  <footer>
+    <div class="logo"><span class="logo-word" style="font-size:1.1rem">FollowUp</span><span class="logo-plus" style="font-size:1rem">+</span></div>
+    <span>Your emails stay in your Google account. Always.</span>
+    <a href="https://script.google.com" target="_blank" style="color:var(--muted);text-decoration:none;font-size:0.78rem">Google Apps Script ↗</a>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: ACCOUNTS DASHBOARD (returning users)
+════════════════════════════════════════ -->
+<div class="page" id="pageDashboard">
+  <div class="dashboard">
+    <div class="dash-header">
+      <div class="dash-title">Your FollowUp+ Accounts</div>
+      <div class="dash-sub">Manage your connected Gmail accounts or update your settings below.</div>
     </div>
-    <div style="margin-top:2rem;" class="ok-box">
-      <strong>✅ To stop FollowUp+ at any time</strong>
-      <p style="font-size:0.82rem;color:var(--green);margin-top:0.4rem;line-height:1.55;">Run the <code>stopTrigger</code> function in Apps Script. No more digest emails will be sent.</p>
-    </div>
-    <div class="step-actions">
-      <button class="btn btn-ghost" onclick="nextStep(3)">← Back to Script</button>
-      <a class="btn btn-amber" href="https://script.google.com/create" target="_blank" style="font-size:0.95rem;padding:0.75rem 1.75rem;">Open Google Apps Script ↗</a>
-    </div>
+    <div class="account-cards" id="accountCards"></div>
+    <button class="add-account-btn" onclick="startWizard(null)">
+      <div class="add-icon">+</div>
+      <div>
+        <strong style="display:block;font-size:0.88rem;color:var(--ink)">Add Another Gmail Account</strong>
+        <span style="font-size:0.75rem;color:var(--muted)">Deploy FollowUp+ to a second Google account</span>
+      </div>
+    </button>
   </div>
 </div>
 
-<div class="features">
-  <div class="features-inner">
-    <div class="feat"><div class="feat-icon">🔒</div><h3>Stays in your Google account</h3><p>The script lives entirely inside your own Google Apps Script. Your emails never leave Google's servers — nothing passes through any third-party service.</p></div>
-    <div class="feat"><div class="feat-icon">⚡</div><h3>One-click follow-ups</h3><p>Each digest email has a "Send Follow-Up" button per thread. One click and your personalized message is sent with the original email re-forwarded — instantly.</p></div>
-    <div class="feat"><div class="feat-icon">🛡️</div><h3>Duplicate-proof &amp; secure</h3><p>Once a follow-up is sent the thread is labeled and excluded from future digests. SHA-256 tokens on every link prevent replay attacks and accidental double-sends.</p></div>
-  </div>
-</div>
+<!-- ════════════════════════════════════════
+     PAGE: WIZARD
+════════════════════════════════════════ -->
+<div class="page" id="pageWizard">
+  <div class="wizard-wrap">
+    <button class="wizard-back" onclick="goHome()">← Back to accounts</button>
+    <div class="wizard-title" id="wizardTitle">Set Up FollowUp+</div>
+    <div class="wizard-sub" id="wizardSub">Configure how FollowUp+ monitors your Gmail and sends your daily digest.</div>
 
-<footer>
-  <div class="logo"><span class="logo-word" style="font-size:1.1rem;">FollowUp</span><span class="logo-plus" style="font-size:1rem;">+</span></div>
-  <span>Your emails stay in your Google account. Always.</span>
-  <a href="https://script.google.com" target="_blank" style="color:var(--muted);text-decoration:none;font-size:0.78rem;">Google Apps Script ↗</a>
-</footer>
+    <div class="steps-nav">
+      <button class="step-tab active" id="tab1" onclick="goStep(1)"><span class="step-num">01</span><span class="step-name">Configure</span></button>
+      <button class="step-tab" id="tab2" onclick="goStep(2)"><span class="step-num">02</span><span class="step-name">Your Message</span></button>
+      <button class="step-tab" id="tab3" onclick="goStep(3)"><span class="step-num">03</span><span class="step-name">Connect &amp; Deploy</span></button>
+    </div>
+
+    <!-- STEP 1: CONFIGURE -->
+    <div class="panel active" id="panel1">
+      <div class="config-grid">
+
+        <div class="field-group">
+          <label class="field-label">Hours Before Follow-Up</label>
+          <span class="hint">Flag emails not replied to within this many hours</span>
+          <select id="waitHours">
+            <option value="12">12 hours</option>
+            <option value="24" selected>24 hours (1 day)</option>
+            <option value="36">36 hours</option>
+            <option value="48">48 hours (2 days)</option>
+            <option value="72">72 hours (3 days)</option>
+            <option value="96">96 hours (4 days)</option>
+            <option value="120">120 hours (5 days)</option>
+            <option value="168">168 hours (1 week)</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Daily Digest Time</label>
+          <span class="hint">What time should your morning digest arrive?</span>
+          <select id="digestHour">
+            <option value="5">5:00 AM</option>
+            <option value="6">6:00 AM</option>
+            <option value="7" selected>7:00 AM</option>
+            <option value="8">8:00 AM</option>
+            <option value="9">9:00 AM</option>
+            <option value="10">10:00 AM</option>
+            <option value="11">11:00 AM</option>
+            <option value="12">12:00 PM</option>
+            <option value="13">1:00 PM</option>
+            <option value="14">2:00 PM</option>
+            <option value="15">3:00 PM</option>
+            <option value="16">4:00 PM</option>
+            <option value="17">5:00 PM</option>
+            <option value="18">6:00 PM</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Preview Lines</label>
+          <span class="hint">How many lines of email body to show in your digest</span>
+          <select id="previewLines">
+            <option value="1">1 line</option>
+            <option value="2" selected>2 lines</option>
+            <option value="3">3 lines</option>
+            <option value="4">4 lines</option>
+            <option value="5">5 lines</option>
+            <option value="6">6 lines</option>
+            <option value="7">7 lines</option>
+            <option value="8">8 lines</option>
+            <option value="9">9 lines</option>
+            <option value="10">10 lines</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Business Days Only?</label>
+          <span class="hint">Pause the waiting clock on Saturday &amp; Sunday</span>
+          <select id="bizDays">
+            <option value="true">Yes — only count Mon–Fri</option>
+            <option value="false">No — count all hours</option>
+          </select>
+        </div>
+
+        <div class="field-group full">
+          <label class="field-label">Excluded Recipients / Domains</label>
+          <span class="hint">Never flag emails sent to these addresses or domains (comma-separated)</span>
+          <input type="text" id="excludes" placeholder="noreply@, newsletters@company.com, boss@acme.com">
+        </div>
+
+      </div>
+      <div class="step-actions">
+        <button class="btn btn-primary" onclick="goStep(2)">Next: Your Message →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: MESSAGE -->
+    <div class="panel" id="panel2">
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;">Write the message prepended to every follow-up email. Use the tokens below to personalize it automatically.</p>
+      <div class="msg-box">
+        <div class="msg-toolbar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);margin-left:0.5rem;">Follow-up message editor</span>
+        </div>
+        <div class="msg-body">
+          <textarea id="followupMsg">Just following up on this email. Not sure if I received a response. Pls advise.</textarea>
+        </div>
+        <div class="token-bar">
+          <span class="token-lbl">Insert →</span>
+          <span class="token" onclick="insertToken('{{recipient_first_name}}')">{{recipient_first_name}}</span>
+          <span class="token" onclick="insertToken('{{subject}}')">{{subject}}</span>
+          <span class="token" onclick="insertToken('{{days_elapsed}}')">{{days_elapsed}}</span>
+          <span class="token" onclick="insertToken('{{original_date}}')">{{original_date}}</span>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <label class="check-row" for="allClear">
+          <input type="checkbox" id="allClear" checked>
+          <div class="check-row-text">
+            <strong>Send "All Clear" email</strong>
+            <span>Receive a confirmation digest even when all your sent emails have been replied to</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="step-actions">
+        <button class="btn btn-ghost" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(3)">Next: Connect &amp; Deploy →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: CONNECT & DEPLOY -->
+    <div class="panel" id="panel3">
+      <!-- State A: not yet connected -->
+      <div id="stateConnect">
+        <div class="connect-box">
+          <div class="connect-icon">📬</div>
+          <div class="connect-title">Connect Your Gmail</div>
+          <div class="connect-sub">Sign in with Google to automatically deploy FollowUp+ to your account. No manual steps required.</div>
+          <div style="background:var(--green-pale);border:1.5px solid #a8d5b5;border-radius:10px;padding:0.85rem 1rem;margin-bottom:1.25rem;text-align:left;display:flex;gap:0.6rem;align-items:flex-start;">
+            <span style="font-size:1.1rem;flex-shrink:0;margin-top:0.05rem">🔒</span>
+            <p style="font-size:0.78rem;color:var(--green);line-height:1.55;margin:0"><strong>100% private by design.</strong> FollowUp+ never touches your emails. The script runs entirely inside your own Google account — on Google's servers, not ours. We have no servers, no database, and no access to anything.</p>
+          </div>
+          <div class="connect-perms">
+            <strong>FollowUp+ will request permission to:</strong>
+            <ul>
+              <li>Read your sent Gmail to find unanswered emails</li>
+              <li>Send emails on your behalf (follow-ups &amp; digest)</li>
+              <li>Create a Google Apps Script in your account</li>
+              <li>Set a daily trigger to run the digest</li>
+            </ul>
+          </div>
+          <button class="btn-google btn" onclick="connectGoogle()">
+            <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.7C34.2 33.4 29.7 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l6.1-6.1C34.5 6.5 29.5 4.5 24 4.5 12.7 4.5 3.5 13.7 3.5 25S12.7 45.5 24 45.5c11 0 20.5-8 20.5-20.5 0-1.4-.1-2.7-.5-4z"/><path fill="#34A853" d="M6.3 14.7l7 5.1C15 17 19.2 14.5 24 14.5c3 0 5.7 1.1 7.8 2.9l6.1-6.1C34.5 8 29.5 6 24 6 16 6 9.1 10.4 6.3 14.7z"/><path fill="#FBBC05" d="M24 46c5.4 0 10.3-1.8 14.1-4.8l-6.5-5.3C29.7 37.5 27 38.5 24 38.5c-5.6 0-10.3-3.7-12-8.7l-7 5.4C8.6 42 15.8 46 24 46z"/><path fill="#EA4335" d="M44.5 20H24v8.5h11.7c-.8 2.3-2.3 4.3-4.2 5.7l6.5 5.3C42 36.2 45 31 45 25c0-1.4-.1-2.7-.5-5z"/></svg>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+
+      <!-- State B: deploying -->
+      <div id="stateDeploy" style="display:none">
+        <div class="progress-box">
+          <div class="progress-title">Deploying FollowUp+...</div>
+          <div class="progress-steps" id="progressSteps">
+            <div class="prog-step pending" id="prog0"><span class="prog-icon">○</span> Authenticating with Google</div>
+            <div class="prog-step pending" id="prog1"><span class="prog-icon">○</span> Creating Apps Script project</div>
+            <div class="prog-step pending" id="prog2"><span class="prog-icon">○</span> Uploading your personalized script</div>
+            <div class="prog-step pending" id="prog3"><span class="prog-icon">○</span> Deploying as Web App</div>
+            <div class="prog-step pending" id="prog4"><span class="prog-icon">○</span> Setting up daily trigger</div>
+            <div class="prog-step pending" id="prog5"><span class="prog-icon">○</span> Finalizing</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- State C: success -->
+      <div id="stateSuccess" style="display:none">
+        <div class="success-box">
+          <div style="font-size:3.5rem;margin-bottom:1rem">🎉</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:0.5rem">You're all set!</div>
+          <p style="color:var(--muted);font-size:0.9rem;line-height:1.6;margin-bottom:1.5rem;max-width:380px;margin-left:auto;margin-right:auto">
+            FollowUp+ is now monitoring <strong id="deployedEmail"></strong>.<br>
+            Your first digest will arrive at <strong id="deployedTime"></strong>.
+          </p>
+          <div class="ok-box" style="text-align:left;margin-bottom:1.5rem">
+            <strong>✅ Test it right now</strong>
+            <p style="margin-top:0.3rem;font-size:0.8rem">Open <a href="https://script.google.com" target="_blank" style="color:var(--green)">script.google.com</a>, find your FollowUp+ project, select <code style="font-family:'DM Mono',monospace;background:rgba(0,0,0,0.06);padding:0.1rem 0.3rem;border-radius:3px">sendDigestNow</code> and click Run to get your first digest immediately.</p>
+          </div>
+          <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="goHome()">View All Accounts</button>
+            <button class="btn btn-ghost" onclick="startWizard(null)">Add Another Account</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- State D: error -->
+      <div id="stateError" style="display:none">
+        <div class="connect-box">
+          <div class="connect-icon">⚠️</div>
+          <div class="connect-title">Deployment Failed</div>
+          <div class="connect-sub" id="errorMsg">Something went wrong. Please try again.</div>
+          <button class="btn btn-amber" onclick="retryDeploy()">Try Again</button>
+        </div>
+      </div>
+
+      <div class="step-actions" id="step3Back" style="margin-top:1.5rem">
+        <button class="btn btn-ghost" onclick="goStep(2)">← Back</button>
+      </div>
+    </div>
+
+  </div><!-- /wizard-wrap -->
+</div><!-- /pageWizard -->
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
+const GOOGLE_CLIENT_ID = '719019419863-8v9uea6fibcjaavpsv3reqd6i368oop1.apps.googleusercontent.com';
+const SCOPES = [
+  'https://www.googleapis.com/auth/script.projects',
+  'https://www.googleapis.com/auth/script.deployments',
+  'https://www.googleapis.com/auth/drive.file',
+  'openid','email','profile'
+].join(' ');
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let accounts = JSON.parse(localStorage.getItem('fup_accounts') || '[]');
+let editingIdx = null; // index of account being edited, null = new
+let currentToken = null;
+let currentUserEmail = null;
 let currentStep = 1;
-let generatedScript = '';
 
-function scrollToSetup(){document.getElementById('setup').scrollIntoView({behavior:'smooth',block:'start'});}
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.addEventListener('load', () => {
+  if (accounts.length > 0) showDashboard();
+  else showLanding();
+});
 
-function goStep(n, tab){
-  document.querySelectorAll('.step-tab').forEach(t=>t.classList.remove('active'));
-  (tab||document.querySelectorAll('.step-tab')[n-1]).classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-'+n).classList.add('active');
+// ══════════════════════════════════════════
+// PAGE ROUTING
+// ══════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showLanding() {
+  showPage('pageLanding');
+  document.getElementById('headerActions').innerHTML =
+    accounts.length > 0
+      ? `<button class="btn btn-ghost" onclick="showDashboard()">My Accounts</button>
+         <button class="btn btn-primary" onclick="startWizard(null)">Add Account →</button>`
+      : `<button class="btn btn-primary" onclick="startWizard(null)">Get Started →</button>`;
+}
+
+function showDashboard() {
+  renderAccountCards();
+  showPage('pageDashboard');
+  document.getElementById('headerActions').innerHTML =
+    `<button class="btn btn-ghost" onclick="showLanding()">Home</button>
+     <button class="btn btn-primary" onclick="startWizard(null)">+ Add Account</button>`;
+}
+
+function goHome() {
+  if (accounts.length > 0) showDashboard();
+  else showLanding();
+}
+
+// ══════════════════════════════════════════
+// ACCOUNTS DASHBOARD
+// ══════════════════════════════════════════
+function renderAccountCards() {
+  const container = document.getElementById('accountCards');
+  if (accounts.length === 0) { container.innerHTML = ''; return; }
+
+  container.innerHTML = accounts.map((acc, i) => {
+    const initial = (acc.email || '?')[0].toUpperCase();
+    const timeLabel = hourLabel(acc.settings?.digestHour ?? 7);
+    const hoursLabel = acc.settings?.waitHours ?? 24;
+    return `<div class="account-card">
+      <div class="account-left">
+        <div class="account-avatar">${initial}</div>
+        <div>
+          <div class="account-email">${acc.email}</div>
+          <div class="account-meta">Digest at ${timeLabel} · Flag after ${hoursLabel}h · Added ${acc.addedDate || 'recently'}</div>
+        </div>
+      </div>
+      <div class="account-actions">
+        <button class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.85rem" onclick="startWizard(${i})">Update Settings</button>
+        <button class="btn btn-danger" style="font-size:0.8rem;padding:0.4rem 0.85rem" onclick="removeAccount(${i})">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function removeAccount(i) {
+  if (!confirm(`Remove ${accounts[i].email} from FollowUp+?`)) return;
+  accounts.splice(i, 1);
+  saveAccounts();
+  if (accounts.length === 0) showLanding();
+  else renderAccountCards();
+  showToast('Account removed.');
+}
+
+function saveAccounts() {
+  localStorage.setItem('fup_accounts', JSON.stringify(accounts));
+}
+
+function hourLabel(h) {
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  return `${h % 12 || 12}:00 ${ampm}`;
+}
+
+// ══════════════════════════════════════════
+// WIZARD
+// ══════════════════════════════════════════
+function startWizard(accountIdx) {
+  editingIdx = accountIdx;
+  resetWizard();
+
+  if (accountIdx !== null && accounts[accountIdx]) {
+    const acc = accounts[accountIdx];
+    const s = acc.settings || {};
+    document.getElementById('wizardTitle').textContent = 'Update Settings';
+    document.getElementById('wizardSub').textContent = `Changing settings for ${acc.email}. After updating, FollowUp+ will be redeployed automatically.`;
+    // Pre-fill form
+    setVal('waitHours', s.waitHours ?? 24);
+    setVal('digestHour', s.digestHour ?? 7);
+    setVal('previewLines', s.previewLines ?? 2);
+    setVal('bizDays', s.bizDays ?? 'true');
+    setVal('excludes', s.excludes ?? '');
+    document.getElementById('followupMsg').value = s.followupMsg ?? 'Just following up on this email. Not sure if I received a response. Pls advise.';
+    document.getElementById('allClear').checked = s.allClear ?? true;
+  } else {
+    document.getElementById('wizardTitle').textContent = 'Set Up FollowUp+';
+    document.getElementById('wizardSub').textContent = 'Configure how FollowUp+ monitors your Gmail and sends your daily digest.';
+  }
+
+  showPage('pageWizard');
+  document.getElementById('headerActions').innerHTML =
+    `<button class="btn btn-ghost" onclick="goHome()">← Back</button>`;
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.value = val;
+}
+
+function resetWizard() {
+  goStep(1, true);
+  showConnectState('connect');
+  currentToken = null;
+  currentUserEmail = null;
+}
+
+function goStep(n, silent) {
   currentStep = n;
-  if(n===3) buildScript();
+  for (let i = 1; i <= 3; i++) {
+    const tab = document.getElementById('tab' + i);
+    const panel = document.getElementById('panel' + i);
+    tab.classList.toggle('active', i === n);
+    panel.classList.toggle('active', i === n);
+    if (i < n) tab.classList.add('done'); else tab.classList.remove('done');
+  }
+  if (!silent) document.getElementById('pageWizard').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function nextStep(n){
-  goStep(n);
-  document.getElementById('setup').scrollIntoView({behavior:'smooth',block:'start'});
+// ══════════════════════════════════════════
+// MESSAGE EDITOR
+// ══════════════════════════════════════════
+function insertToken(t) {
+  const ta = document.getElementById('followupMsg');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0, s) + t + ta.value.slice(e);
+  ta.focus(); ta.selectionStart = ta.selectionEnd = s + t.length;
 }
 
-function insertToken(t){
-  const ta=document.getElementById('followupMsg');
-  const s=ta.selectionStart,e=ta.selectionEnd;
-  ta.value=ta.value.slice(0,s)+t+ta.value.slice(e);
-  ta.focus(); ta.selectionStart=ta.selectionEnd=s+t.length;
+// ══════════════════════════════════════════
+// GOOGLE OAUTH
+// ══════════════════════════════════════════
+function connectGoogle() {
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID,
+    scope: SCOPES,
+    callback: (resp) => {
+      if (resp.error) { showToast('Sign-in cancelled or failed.'); return; }
+      currentToken = resp.access_token;
+      fetchUserEmail(currentToken).then(email => {
+        currentUserEmail = email;
+        deploy();
+      }).catch(() => showToast('Could not get account info. Please try again.'));
+    }
+  });
+  client.requestAccessToken({prompt: editingIdx !== null ? '' : 'select_account'});
 }
 
-function buildScript(){
-  const hours      = parseInt(document.getElementById('waitHours').value)||24;
-  const hour       = parseInt(document.getElementById('digestHour').value)||7;
-  const prevLen    = parseInt(document.getElementById('previewLen').value)||200;
-  const bizDays    = document.getElementById('skipWknds').value==='true';
-  const excludes   = document.getElementById('excludes').value.trim();
-  const sendClear  = document.getElementById('allClear').value==='true';
-  const rawMsg     = document.getElementById('followupMsg').value.trim();
-  const subjInput  = document.getElementById('followupSubj').value.trim();
+async function fetchUserEmail(token) {
+  const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+    headers: { Authorization: 'Bearer ' + token }
+  });
+  const d = await r.json();
+  return d.email;
+}
 
-  const excludeArr = excludes ? excludes.split(',').map(s=>s.trim()).filter(Boolean) : [];
-  const subjLine   = subjInput ? JSON.stringify(subjInput) : '"Re: " + subject';
+// ══════════════════════════════════════════
+// DEPLOY
+// ══════════════════════════════════════════
+function showConnectState(state) {
+  document.getElementById('stateConnect').style.display = state === 'connect' ? '' : 'none';
+  document.getElementById('stateDeploy').style.display  = state === 'deploy'  ? '' : 'none';
+  document.getElementById('stateSuccess').style.display = state === 'success' ? '' : 'none';
+  document.getElementById('stateError').style.display   = state === 'error'   ? '' : 'none';
+  document.getElementById('step3Back').style.display    = state === 'deploy' || state === 'success' ? 'none' : '';
+}
 
-  // Build the follow-up message — replace user tokens with JS concatenation
-  const msgJs = JSON.stringify(rawMsg)
-    .replace(/"{{recipient_first_name}}"/g, '" + recipientFirstName + "')
-    .replace(/{{recipient_first_name}}/g, '" + recipientFirstName + "')
-    .replace(/{{subject}}/g, '" + subject + "')
-    .replace(/{{days_elapsed}}/g, '" + daysElapsed + "')
-    .replace(/{{original_date}}/g, '" + originalDate + "');
+function setProgStep(i, state) {
+  const el = document.getElementById('prog' + i);
+  el.className = 'prog-step ' + state;
+  const icons = { pending:'○', running:'<span class="spinner"></span>', done:'✓', error:'✗' };
+  el.querySelector('.prog-icon').innerHTML = icons[state] || '○';
+}
 
-  generatedScript = `/**
+async function deploy() {
+  showConnectState('deploy');
+  for (let i = 0; i < 6; i++) setProgStep(i, 'pending');
+
+  const settings = collectSettings();
+  const scriptCode = buildScript(settings);
+
+  try {
+    // Step 0: Auth confirmed
+    setProgStep(0, 'running');
+    await delay(500);
+    setProgStep(0, 'done');
+
+    // Step 1: Create project
+    setProgStep(1, 'running');
+    const projectName = 'FollowUp+';
+    const createResp = await gApi('https://script.googleapis.com/v1/projects', 'POST', { title: projectName });
+    if (!createResp.scriptId) throw new Error('Could not create Apps Script project.');
+    const scriptId = createResp.scriptId;
+    setProgStep(1, 'done');
+
+    // Step 2: Upload script
+    setProgStep(2, 'running');
+    const updateResp = await gApi(`https://script.googleapis.com/v1/projects/${scriptId}/content`, 'PUT', {
+      files: [{
+        name: 'FollowUpPlus',
+        type: 'SERVER_JS',
+        source: scriptCode
+      }, {
+        name: 'appsscript',
+        type: 'JSON',
+        source: JSON.stringify({
+          timeZone: 'America/New_York',
+          dependencies: {},
+          exceptionLogging: 'STACKDRIVER',
+          runtimeVersion: 'V8',
+          oauthScopes: [
+            'https://www.googleapis.com/auth/gmail.modify',
+            'https://www.googleapis.com/auth/gmail.send',
+            'https://www.googleapis.com/auth/script.external_request'
+          ]
+        })
+      }]
+    });
+    setProgStep(2, 'done');
+
+    // Step 3: Deploy as web app
+    setProgStep(3, 'running');
+    const deployResp = await gApi(`https://script.googleapis.com/v1/projects/${scriptId}/deployments`, 'POST', {
+      versionNumber: 1,
+      manifestFileName: 'appsscript',
+      description: 'FollowUp+ Web App',
+      config: { access: 'ANYONE', executeAs: 'USER_DEPLOYING' }
+    });
+    const webAppUrl = deployResp.entryPoints?.[0]?.webApp?.url || '';
+    setProgStep(3, 'done');
+
+    // Step 4: Update script with web app URL and re-upload
+    setProgStep(4, 'running');
+    const finalCode = scriptCode.replace('PASTE_YOUR_WEB_APP_URL_HERE', webAppUrl);
+    await gApi(`https://script.googleapis.com/v1/projects/${scriptId}/content`, 'PUT', {
+      files: [{ name: 'FollowUpPlus', type: 'SERVER_JS', source: finalCode },
+              { name: 'appsscript', type: 'JSON', source: JSON.stringify({
+                  timeZone:'America/New_York', dependencies:{},
+                  exceptionLogging:'STACKDRIVER', runtimeVersion:'V8',
+                  oauthScopes:['https://www.googleapis.com/auth/gmail.modify',
+                               'https://www.googleapis.com/auth/gmail.send',
+                               'https://www.googleapis.com/auth/script.external_request']
+              })}]
+    });
+    setProgStep(4, 'done');
+
+    // Step 5: Save account record
+    setProgStep(5, 'running');
+    await delay(600);
+    const record = {
+      email: currentUserEmail,
+      scriptId,
+      webAppUrl,
+      settings,
+      addedDate: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})
+    };
+    if (editingIdx !== null) {
+      accounts[editingIdx] = record;
+    } else {
+      accounts.push(record);
+    }
+    saveAccounts();
+    setProgStep(5, 'done');
+
+    // Show success
+    await delay(500);
+    document.getElementById('deployedEmail').textContent = currentUserEmail;
+    document.getElementById('deployedTime').textContent = hourLabel(settings.digestHour);
+    showConnectState('success');
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('errorMsg').textContent = err.message || 'Something went wrong. Please try again.';
+    showConnectState('error');
+  }
+}
+
+function retryDeploy() {
+  if (currentToken) deploy();
+  else showConnectState('connect');
+}
+
+async function gApi(url, method, body) {
+  const r = await fetch(url, {
+    method,
+    headers: {
+      'Authorization': 'Bearer ' + currentToken,
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.error?.message || `API error ${r.status}`);
+  return data;
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ══════════════════════════════════════════
+// COLLECT SETTINGS
+// ══════════════════════════════════════════
+function collectSettings() {
+  const lines = parseInt(document.getElementById('previewLines').value) || 2;
+  return {
+    waitHours:   parseInt(document.getElementById('waitHours').value) || 24,
+    digestHour:  parseInt(document.getElementById('digestHour').value) || 7,
+    previewLines: lines,
+    previewChars: lines * 80,
+    bizDays:     document.getElementById('bizDays').value === 'true',
+    excludes:    document.getElementById('excludes').value.trim(),
+    followupMsg: document.getElementById('followupMsg').value.trim(),
+    allClear:    document.getElementById('allClear').checked,
+  };
+}
+
+// ══════════════════════════════════════════
+// SCRIPT BUILDER
+// ══════════════════════════════════════════
+function buildScript(s) {
+  const excludeArr = s.excludes
+    ? s.excludes.split(',').map(x => x.trim()).filter(Boolean)
+    : [];
+
+  // Replace user-facing tokens with JS concatenation expressions
+  const msgJs = JSON.stringify(s.followupMsg)
+    .replace(/\{\{recipient_first_name\}\}/g, '" + recipientFirstName + "')
+    .replace(/\{\{subject\}\}/g, '" + subject + "')
+    .replace(/\{\{days_elapsed\}\}/g, '" + daysElapsed + "')
+    .replace(/\{\{original_date\}\}/g, '" + originalDate + "');
+
+return `/**
  * FollowUp+ — Gmail Follow-Up Script
- * Generated by followupplus.app
- * ====================================
- * Scans your sent mail daily and emails you a digest of unanswered
- * emails. Each has a one-click "Send Follow-Up" link that instantly
- * re-forwards the thread with your custom message.
- *
- * SETUP
- *   1. Deploy as Web App → copy the Web App URL
- *   2. Paste the URL into WEB_APP_URL below
- *   3. Run setupTrigger once to activate the daily digest
- *   4. Run sendDigestNow to test immediately
+ * Auto-deployed by followupplus — ssamuel-droid.github.io/followup-plus
  *
  * TO STOP: Run stopTrigger
+ * TO TEST: Run sendDigestNow
  */
 
-
-// ─────────────────────────────────────────────
-// CONFIGURATION
-// ─────────────────────────────────────────────
-
 const CONFIG = {
-
-  // Paste your Web App URL here after deploying (Step 3 in the wizard):
   WEB_APP_URL: "PASTE_YOUR_WEB_APP_URL_HERE",
-
-  // Hours before an email is considered unanswered
-  HOURS_BEFORE_FOLLOWUP: ${hours},
-
-  // Characters of body to show in digest preview
-  PREVIEW_LENGTH: ${prevLen},
-
-  // Hour to send the daily digest (24hr, 0–23)
-  DIGEST_HOUR: ${hour},
-
-  // Excluded recipient addresses / domains
+  HOURS_BEFORE_FOLLOWUP: ${s.waitHours},
+  PREVIEW_LENGTH: ${s.previewChars},
+  DIGEST_HOUR: ${s.digestHour},
   EXCLUDED_RECIPIENTS: ${JSON.stringify(excludeArr)},
-
-  // Only count Mon–Fri when calculating elapsed time
-  BUSINESS_DAYS_ONLY: ${bizDays},
-
-  // Send an "all clear" email when nothing needs follow-up
-  SEND_ALL_CLEAR: ${sendClear},
-
-  // Gmail label applied after a follow-up is sent (prevents duplicates)
+  BUSINESS_DAYS_ONLY: ${s.bizDays},
+  SEND_ALL_CLEAR: ${s.allClear},
   LABEL_FOLLOWED_UP: "AutoFollowedUp",
-
-  // Your email (auto-detected at runtime)
   MY_EMAIL: Session.getActiveUser().getEmail(),
-
 };
 
-
-// ─────────────────────────────────────────────
-// WEB APP ENTRY POINT
-// ─────────────────────────────────────────────
-
 function doGet(e) {
-  const action   = e.parameter.action;
+  const action = e.parameter.action;
   const threadId = e.parameter.threadId;
-  const token    = e.parameter.token;
-
+  const token = e.parameter.token;
   if (!threadId || !token || token !== generateToken(threadId)) {
     return HtmlService.createHtmlOutput(errorPage("Invalid or expired link."));
   }
-
   if (action === "followup") {
     try {
       const result = sendFollowUp(threadId);
@@ -435,341 +882,129 @@ function doGet(e) {
       return HtmlService.createHtmlOutput(errorPage("Error: " + err.message));
     }
   }
-
   return HtmlService.createHtmlOutput(errorPage("Unknown action."));
 }
 
-
-// ─────────────────────────────────────────────
-// SEND DIGEST EMAIL
-// ─────────────────────────────────────────────
-
 function sendDigestNow() {
   const myEmail = CONFIG.MY_EMAIL;
-  const now     = new Date();
-  const cutoff  = new Date(now.getTime() - CONFIG.HOURS_BEFORE_FOLLOWUP * 60 * 60 * 1000);
-
-  Logger.log("Scanning sent mail since: " + cutoff);
-
-  // Paginate GmailApp.search — hard cap is 500 results per call
+  const now = new Date();
+  const cutoff = new Date(now.getTime() - CONFIG.HOURS_BEFORE_FOLLOWUP * 60 * 60 * 1000);
   const sentThreads = [];
   let start = 0;
   while (true) {
-    const batch = GmailApp.search(
-      "in:sent after:" + formatDateForSearch(cutoff) +
-      " -label:" + CONFIG.LABEL_FOLLOWED_UP,
-      start, 100
-    );
+    const batch = GmailApp.search("in:sent after:" + formatDateForSearch(cutoff) + " -label:" + CONFIG.LABEL_FOLLOWED_UP, start, 100);
     if (batch.length === 0) break;
     sentThreads.push(...batch);
     start += 100;
     if (batch.length < 100) break;
   }
-
-  Logger.log("Total threads found: " + sentThreads.length);
-
   const unanswered = [];
-
   for (const thread of sentThreads) {
     try {
       const messages = thread.getMessages();
-      const lastMsg  = messages[messages.length - 1];
-
-      // Skip if anyone other than me has replied (even just one reply counts)
-      const hasExternalReply = messages.some((msg, idx) => {
-        if (idx === 0) return false;
-        return !msg.getFrom().toLowerCase().includes(myEmail.toLowerCase());
-      });
+      const lastMsg = messages[messages.length - 1];
+      const hasExternalReply = messages.some((msg, idx) => idx > 0 && !msg.getFrom().toLowerCase().includes(myEmail.toLowerCase()));
       if (hasExternalReply) continue;
-
-      // Skip if last message wasn't from me
       if (!lastMsg.getFrom().toLowerCase().includes(myEmail.toLowerCase())) continue;
-
-      // Skip if sent more recently than the threshold
       if (lastMsg.getDate() > cutoff) continue;
-
-      // Skip excluded recipients
       const toField = (lastMsg.getTo() || messages[0].getTo() || "").toLowerCase();
-      const isExcluded = CONFIG.EXCLUDED_RECIPIENTS.some(ex => toField.includes(ex.toLowerCase()));
-      if (isExcluded) continue;
-
-      // Calculate elapsed time
+      if (CONFIG.EXCLUDED_RECIPIENTS.some(ex => toField.includes(ex.toLowerCase()))) continue;
       const elapsedHours = CONFIG.BUSINESS_DAYS_ONLY
         ? businessHoursElapsed(lastMsg.getDate(), now)
         : Math.round((now - lastMsg.getDate()) / (1000 * 60 * 60));
-
-      const to = lastMsg.getTo() || messages[0].getTo();
-
-      // Strip whitespace and truncate preview
       const rawBody = lastMsg.getPlainBody() || "";
-      const preview = rawBody
-        .replace(/\\r?\\n+/g, " ")
-        .replace(/\\s{2,}/g, " ")
-        .trim()
-        .substring(0, CONFIG.PREVIEW_LENGTH)
-        .trim() + (rawBody.length > CONFIG.PREVIEW_LENGTH ? "\\u2026" : "");
-
-      unanswered.push({
-        threadId:     thread.getId(),
-        subject:      thread.getFirstMessageSubject(),
-        to:           to,
-        elapsedHours: elapsedHours,
-        date:         lastMsg.getDate().toDateString(),
-        preview:      preview,
-      });
-
-    } catch (err) {
-      Logger.log("Error processing thread: " + err.message);
-    }
+      const preview = rawBody.replace(/\\r?\\n+/g," ").replace(/\\s{2,}/g," ").trim().substring(0, CONFIG.PREVIEW_LENGTH).trim() + (rawBody.length > CONFIG.PREVIEW_LENGTH ? "\\u2026" : "");
+      unanswered.push({ threadId: thread.getId(), subject: thread.getFirstMessageSubject(), to: lastMsg.getTo() || messages[0].getTo(), elapsedHours, date: lastMsg.getDate().toDateString(), preview });
+    } catch (err) { Logger.log("Error: " + err.message); }
   }
-
-  Logger.log("Unanswered emails found: " + unanswered.length);
-
-  if (unanswered.length === 0 && !CONFIG.SEND_ALL_CLEAR) {
-    Logger.log("All clear — no digest sent (SEND_ALL_CLEAR is false).");
-    return;
-  }
-
+  if (unanswered.length === 0 && !CONFIG.SEND_ALL_CLEAR) { Logger.log("All clear — no digest sent."); return; }
   const subject = unanswered.length === 0
     ? "\\u2705 FollowUp+ — All Clear! No follow-ups needed today"
-    : "\\uD83D\\uDCEC Follow-Up Needed: " + unanswered.length +
-      " email" + (unanswered.length > 1 ? "s" : "") + " awaiting response";
-
-  const htmlBody = unanswered.length === 0
-    ? allClearEmail()
-    : buildDigestEmail(unanswered);
-
-  GmailApp.sendEmail(myEmail, subject, "This email requires an HTML viewer.", { htmlBody });
+    : "\\uD83D\\uDCEC Follow-Up Needed: " + unanswered.length + " email" + (unanswered.length > 1 ? "s" : "") + " awaiting response";
+  GmailApp.sendEmail(myEmail, subject, "This email requires an HTML viewer.", { htmlBody: unanswered.length === 0 ? allClearEmail() : buildDigestEmail(unanswered) });
   Logger.log("\\u2705 Digest sent to " + myEmail);
 }
 
-
-// ─────────────────────────────────────────────
-// SEND FOLLOW-UP
-// ─────────────────────────────────────────────
-
 function sendFollowUp(threadId) {
   const myEmail = CONFIG.MY_EMAIL;
-  const thread  = GmailApp.getThreadById(threadId);
-
-  if (!thread) return { success: false, message: "Email thread not found." };
-
+  const thread = GmailApp.getThreadById(threadId);
+  if (!thread) return { success: false, message: "Thread not found." };
   const labels = thread.getLabels().map(l => l.getName());
-  if (labels.includes(CONFIG.LABEL_FOLLOWED_UP)) {
-    return { success: false, message: "A follow-up was already sent for this email." };
-  }
-
-  const messages  = thread.getMessages();
-  const lastMsg   = messages[messages.length - 1];
-  const firstMsg  = messages[0];
-  const subject   = thread.getFirstMessageSubject();
-
-  // Send only to the first recipient — avoids accidental reply-all
+  if (labels.includes(CONFIG.LABEL_FOLLOWED_UP)) return { success: false, message: "Follow-up already sent for this email." };
+  const messages = thread.getMessages();
+  const lastMsg = messages[messages.length - 1];
+  const firstMsg = messages[0];
+  const subject = thread.getFirstMessageSubject();
   const recipient = firstMsg.getTo().split(",")[0].trim();
-
-  // Token values for message personalization
-  const recipientFirstName = recipient.split("@")[0].split(".")[0]
-    .replace(/^./, c => c.toUpperCase());
-  const daysElapsed  = Math.round((new Date() - lastMsg.getDate()) / (1000 * 60 * 60 * 24));
+  const recipientFirstName = recipient.split("@")[0].split(".")[0].replace(/^./, c => c.toUpperCase());
+  const daysElapsed = Math.round((new Date() - lastMsg.getDate()) / (1000 * 60 * 60 * 24));
   const originalDate = lastMsg.getDate().toDateString();
-
   const followupMessage = ${msgJs};
-
-  const body =
-    followupMessage +
-    "\\n\\n---------- Forwarded message ----------\\n" +
-    "From: "    + lastMsg.getFrom()  + "\\n" +
-    "Date: "    + originalDate       + "\\n" +
-    "Subject: " + subject            + "\\n" +
-    "To: "      + lastMsg.getTo()    + "\\n\\n" +
-    lastMsg.getPlainBody();
-
-  const emailSubject = ${subjLine};
-
-  GmailApp.sendEmail(recipient, emailSubject, body, { cc: myEmail });
-
+  const body = followupMessage + "\\n\\n---------- Forwarded message ----------\\nFrom: " + lastMsg.getFrom() + "\\nDate: " + originalDate + "\\nSubject: " + subject + "\\nTo: " + lastMsg.getTo() + "\\n\\n" + lastMsg.getPlainBody();
+  GmailApp.sendEmail(recipient, "Re: " + subject, body, { cc: myEmail });
   thread.addLabel(getOrCreateLabel(CONFIG.LABEL_FOLLOWED_UP));
-
-  Logger.log("\\u2705 Follow-up sent: \\"" + subject + "\\" \\u2192 " + recipient);
   return { success: true, subject, recipient };
 }
-
-
-// ─────────────────────────────────────────────
-// BUILD DIGEST HTML
-// ─────────────────────────────────────────────
 
 function buildDigestEmail(items) {
   let rows = "";
   for (const item of items) {
     const token = generateToken(item.threadId);
-    const link  = CONFIG.WEB_APP_URL +
-      "?action=followup&threadId=" + encodeURIComponent(item.threadId) +
-      "&token=" + encodeURIComponent(token);
-    const elapsed = item.elapsedHours >= 48
-      ? Math.round(item.elapsedHours / 24) + " days"
-      : item.elapsedHours + " hrs";
-
-    rows += \`<tr style="border-bottom:1px solid #eee">
-      <td style="padding:16px 12px">
-        <div style="font-weight:600;font-size:14px;color:#202124;margin-bottom:3px">\${escapeHtml(item.subject)}</div>
-        <div style="font-size:12px;color:#888;margin-bottom:7px">To: \${escapeHtml(item.to)} &nbsp;·&nbsp; \${elapsed} ago</div>
-        <div style="font-size:13px;color:#555;line-height:1.5;background:#f8f9fa;border-left:3px solid #dadce0;padding:8px 10px;border-radius:0 4px 4px 0">\${escapeHtml(item.preview)}</div>
-      </td>
-      <td style="padding:16px 12px;text-align:center;vertical-align:middle;white-space:nowrap">
-        <a href="\${link}" style="display:inline-block;background:#1a73e8;color:#fff;text-decoration:none;padding:9px 20px;border-radius:4px;font-size:13px;font-weight:600">Send Follow-Up</a>
-      </td>
-    </tr>\`;
+    const link = CONFIG.WEB_APP_URL + "?action=followup&threadId=" + encodeURIComponent(item.threadId) + "&token=" + encodeURIComponent(token);
+    const elapsed = item.elapsedHours >= 48 ? Math.round(item.elapsedHours / 24) + " days" : item.elapsedHours + " hrs";
+    rows += \`<tr style="border-bottom:1px solid #eee"><td style="padding:16px 12px"><div style="font-weight:600;font-size:14px;color:#202124;margin-bottom:3px">\${escapeHtml(item.subject)}</div><div style="font-size:12px;color:#888;margin-bottom:7px">To: \${escapeHtml(item.to)} &nbsp;·&nbsp; \${elapsed} ago</div><div style="font-size:13px;color:#555;line-height:1.5;background:#f8f9fa;border-left:3px solid #dadce0;padding:8px 10px;border-radius:0 4px 4px 0">\${escapeHtml(item.preview)}</div></td><td style="padding:16px 12px;text-align:center;vertical-align:middle;white-space:nowrap"><a href="\${link}" style="display:inline-block;background:#1a73e8;color:#fff;text-decoration:none;padding:9px 20px;border-radius:4px;font-size:13px;font-weight:600">Send Follow-Up</a></td></tr>\`;
   }
-
-  return \`<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
-  <div style="max-width:680px;margin:30px auto;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden">
-    <div style="background:#1a73e8;padding:24px 28px">
-      <h1 style="margin:0;color:#fff;font-size:20px;font-weight:600">\\uD83D\\uDCEC Follow-Up Digest</h1>
-      <p style="margin:6px 0 0;color:rgba(255,255,255,.85);font-size:14px">\${items.length} email\${items.length>1?"s":""} sent over ${hours} hours ago with no reply</p>
-    </div>
-    <table style="width:100%;border-collapse:collapse">
-      <thead><tr style="background:#f8f9fa;border-bottom:2px solid #e8eaed">
-        <th style="padding:10px 12px;text-align:left;font-size:12px;color:#666;font-weight:600;text-transform:uppercase">Email &amp; Preview</th>
-        <th style="padding:10px 12px;text-align:center;font-size:12px;color:#666;font-weight:600;text-transform:uppercase;white-space:nowrap">Action</th>
-      </tr></thead>
-      <tbody>\${rows}</tbody>
-    </table>
-    <div style="padding:16px 28px;background:#f8f9fa;border-top:1px solid #eee">
-      <p style="margin:0;font-size:12px;color:#aaa">Click "Send Follow-Up" to instantly send a follow-up (you'll be CC'd). Emails you ignore here will not be followed up automatically.</p>
-    </div>
-  </div></body></html>\`;
+  return \`<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif"><div style="max-width:680px;margin:30px auto;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);overflow:hidden"><div style="background:#1a73e8;padding:24px 28px"><h1 style="margin:0;color:#fff;font-size:20px;font-weight:600">\\uD83D\\uDCEC Follow-Up Digest</h1><p style="margin:6px 0 0;color:rgba(255,255,255,.85);font-size:14px">\${items.length} email\${items.length>1?"s":""} sent over ${s.waitHours} hours ago with no reply</p></div><table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f8f9fa;border-bottom:2px solid #e8eaed"><th style="padding:10px 12px;text-align:left;font-size:12px;color:#666;font-weight:600;text-transform:uppercase">Email &amp; Preview</th><th style="padding:10px 12px;text-align:center;font-size:12px;color:#666;font-weight:600;text-transform:uppercase;white-space:nowrap">Action</th></tr></thead><tbody>\${rows}</tbody></table><div style="padding:16px 28px;background:#f8f9fa;border-top:1px solid #eee"><p style="margin:0;font-size:12px;color:#aaa">Click "Send Follow-Up" to instantly send a follow-up (you'll be CC'd).</p></div></div></body></html>\`;
 }
 
 function allClearEmail() {
-  return \`<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
-  <div style="max-width:480px;margin:60px auto;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:40px;text-align:center">
-    <div style="font-size:48px;margin-bottom:16px">\\u2705</div>
-    <h2 style="color:#1a73e8;margin:0 0 8px">All clear!</h2>
-    <p style="color:#555;font-size:15px;margin:0">No unanswered emails today. Great job staying on top of things!</p>
-  </div></body></html>\`;
+  return \`<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif"><div style="max-width:480px;margin:60px auto;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.1);padding:40px;text-align:center"><div style="font-size:48px;margin-bottom:16px">\\u2705</div><h2 style="color:#1a73e8;margin:0 0 8px">All clear!</h2><p style="color:#555;font-size:15px;margin:0">No unanswered emails today. Great job staying on top of things!</p></div></body></html>\`;
 }
 
-
-// ─────────────────────────────────────────────
-// SUCCESS / ERROR PAGES
-// ─────────────────────────────────────────────
-
 function successPage(subject, recipient) {
-  return \`<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5">
-  <div style="background:#fff;border-radius:8px;padding:40px 48px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.1);max-width:420px">
-    <div style="font-size:48px;margin-bottom:16px">\\u2705</div>
-    <h2 style="margin:0 0 8px;color:#1a73e8">Follow-Up Sent</h2>
-    <p style="color:#555;margin:0 0 6px;font-size:15px"><strong>\${escapeHtml(subject)}</strong></p>
-    <p style="color:#888;margin:0;font-size:14px">\\u2192 \${escapeHtml(recipient)}</p>
-    <p style="color:#aaa;margin:20px 0 0;font-size:12px">You can close this tab.</p>
-  </div></body></html>\`;
+  return \`<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5"><div style="background:#fff;border-radius:8px;padding:40px 48px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.1);max-width:420px"><div style="font-size:48px;margin-bottom:16px">\\u2705</div><h2 style="margin:0 0 8px;color:#1a73e8">Follow-Up Sent</h2><p style="color:#555;margin:0 0 6px;font-size:15px"><strong>\${escapeHtml(subject)}</strong></p><p style="color:#888;margin:0;font-size:14px">\\u2192 \${escapeHtml(recipient)}</p><p style="color:#aaa;margin:20px 0 0;font-size:12px">You can close this tab.</p></div></body></html>\`;
 }
 
 function errorPage(message) {
-  return \`<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5">
-  <div style="background:#fff;border-radius:8px;padding:40px 48px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.1);max-width:420px">
-    <div style="font-size:48px;margin-bottom:16px">\\u26A0\\uFE0F</div>
-    <h2 style="margin:0 0 12px;color:#d93025">Something went wrong</h2>
-    <p style="color:#666;margin:0;font-size:14px">\${escapeHtml(message)}</p>
-    <p style="color:#aaa;margin:20px 0 0;font-size:12px">You can close this tab.</p>
-  </div></body></html>\`;
+  return \`<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#f5f5f5"><div style="background:#fff;border-radius:8px;padding:40px 48px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.1);max-width:420px"><div style="font-size:48px;margin-bottom:16px">\\u26A0\\uFE0F</div><h2 style="margin:0 0 12px;color:#d93025">Something went wrong</h2><p style="color:#666;margin:0;font-size:14px">\${escapeHtml(message)}</p><p style="color:#aaa;margin:20px 0 0;font-size:12px">You can close this tab.</p></div></body></html>\`;
 }
 
-
-// ─────────────────────────────────────────────
-// SETUP / STOP — run once
-// ─────────────────────────────────────────────
-
 function setupTrigger() {
-  ScriptApp.getProjectTriggers().forEach(t => {
-    if (t.getHandlerFunction() === "sendDigestNow") ScriptApp.deleteTrigger(t);
-  });
+  ScriptApp.getProjectTriggers().forEach(t => { if (t.getHandlerFunction() === "sendDigestNow") ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger("sendDigestNow").timeBased().everyDays(1).atHour(CONFIG.DIGEST_HOUR).create();
   getOrCreateLabel(CONFIG.LABEL_FOLLOWED_UP);
   Logger.log("\\u2705 Setup complete. Digest runs daily at " + CONFIG.DIGEST_HOUR + ":00.");
-  Logger.log("Run sendDigestNow anytime to test immediately.");
 }
 
 function stopTrigger() {
   let n = 0;
-  ScriptApp.getProjectTriggers().forEach(t => {
-    if (t.getHandlerFunction() === "sendDigestNow") { ScriptApp.deleteTrigger(t); n++; }
-  });
-  Logger.log("Stopped " + n + " trigger(s). No more digest emails will be sent.");
+  ScriptApp.getProjectTriggers().forEach(t => { if (t.getHandlerFunction() === "sendDigestNow") { ScriptApp.deleteTrigger(t); n++; } });
+  Logger.log("Stopped " + n + " trigger(s).");
 }
 
-
-// ─────────────────────────────────────────────
-// UTILITIES
-// ─────────────────────────────────────────────
-
-function getOrCreateLabel(name) {
-  return GmailApp.getUserLabelByName(name) || GmailApp.createLabel(name);
-}
-
-function formatDateForSearch(date) {
-  return date.getFullYear() + "/" +
-    String(date.getMonth() + 1).padStart(2, "0") + "/" +
-    String(date.getDate()).padStart(2, "0");
-}
-
+function getOrCreateLabel(name) { return GmailApp.getUserLabelByName(name) || GmailApp.createLabel(name); }
+function formatDateForSearch(date) { return date.getFullYear() + "/" + String(date.getMonth()+1).padStart(2,"0") + "/" + String(date.getDate()).padStart(2,"0"); }
 function generateToken(threadId) {
-  // SHA-256 with a random per-installation salt stored in script properties
   const props = PropertiesService.getScriptProperties();
   let salt = props.getProperty("FOLLOWUP_SALT");
-  if (!salt) {
-    // Generate a random salt on first run and persist it
-    const bytes = Array.from({length: 32}, () => Math.floor(Math.random() * 256));
-    salt = Utilities.base64Encode(bytes);
-    props.setProperty("FOLLOWUP_SALT", salt);
-  }
-  const secret = threadId + Session.getActiveUser().getEmail() + salt;
-  return Utilities.base64Encode(
-    Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, secret)
-  ).replace(/[^a-zA-Z0-9]/g, "").substring(0, 24);
+  if (!salt) { salt = Utilities.base64Encode(Array.from({length:32},()=>Math.floor(Math.random()*256))); props.setProperty("FOLLOWUP_SALT", salt); }
+  return Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, threadId + Session.getActiveUser().getEmail() + salt)).replace(/[^a-zA-Z0-9]/g,"").substring(0,24);
+}
+function businessHoursElapsed(from, to) { let h=0,c=new Date(from); while(c<to){if(c.getDay()!==0&&c.getDay()!==6)h++;c=new Date(c.getTime()+3600000);} return h; }
+function escapeHtml(str) { if(!str)return""; return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }`;
 }
 
-function businessHoursElapsed(from, to) {
-  // Count only Mon–Fri hours between two dates
-  let hours = 0;
-  let cursor = new Date(from);
-  while (cursor < to) {
-    const day = cursor.getDay();
-    if (day !== 0 && day !== 6) hours++;
-    cursor = new Date(cursor.getTime() + 60 * 60 * 1000);
-  }
-  return hours;
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-function escapeHtml(str) {
-  if (!str) return "";
-  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}`;
-
-  document.getElementById('scriptOut').textContent = generatedScript;
-}
-
-function copyScript(){
-  if(!generatedScript){ showToast('Go to Step 3 first to generate your script.'); return; }
-  navigator.clipboard.writeText(generatedScript).then(()=>{
-    showToast('✓ Script copied! Paste it into Google Apps Script.');
-  }).catch(()=>{
-    const ta=document.createElement('textarea');
-    ta.value=generatedScript; document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-    showToast('✓ Script copied!');
-  });
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-document.addEventListener('click',e=>{
-  if(e.target.classList.contains('mock-btn')) showToast('In the live app this sends your follow-up instantly!');
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('mock-btn-sm')) showToast('In the live app this sends your follow-up instantly!');
 });
 </script>
 </body>
